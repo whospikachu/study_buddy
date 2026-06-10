@@ -1,0 +1,75 @@
+### 1. Register a New User
+POST http://127.0.0.1:8000/api/register/
+Content-Type: application/json
+
+{
+  "username": "studybuddy2",
+  "email": "test2@example.com",
+  "password": "securepassword123"
+}
+
+###
+
+### 2. Login to Get Your JWT Access Token
+# @name login
+POST http://127.0.0.1:8000/api/login/
+Content-Type: application/json
+
+{
+  "username": "studybuddy2",
+  "password": "securepassword123"
+}
+
+###
+
+### 3. Test Protected To-Do Creation
+# Paste your raw access token string right after 'Bearer'
+POST http://127.0.0.1:8000/todos/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwNDEyNTA5LCJpYXQiOjE3ODA0MDg5MDksImp0aSI6IjQ3ZDBiMmM4ZTY5ZTRlZTNiODI1NjcwNDBjMWYzOTQ4IiwidXNlcl9pZCI6IjEwIn0.53fE9oc9UwDnwvgD2cmHn4WiuIcXQ_CZHBImSY6zdfA
+
+{
+  "task": "Test Todo via VS Code",
+  "is_done": false
+}
+
+###
+
+### 4. Fetch All Your To-Dos
+GET http://127.0.0.1:8000/todos/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwNDEyNTA5LCJpYXQiOjE3ODA0MDg5MDksImp0aSI6IjQ3ZDBiMmM4ZTY5ZTRlZTNiODI1NjcwNDBjMWYzOTQ4IiwidXNlcl9pZCI6IjEwIn0.53fE9oc9UwDnwvgD2cmHn4WiuIcXQ_CZHBImSY6zdfA
+
+### 5. Create a New Exam 
+POST http://127.0.0.1:8000/exams/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwNDEyODkyLCJpYXQiOjE3ODA0MDkyOTIsImp0aSI6IjYwYTNkNDFhZGRmYTRmMjFhOTI5YjQ1MzQ0NjU5NGQ0IiwidXNlcl9pZCI6IjEwIn0.COmSakM2vQdNbJqgD9coUG3i87aCgsULKSX9YnYp5KE
+
+{
+  "subject_name": "Material Science Midterm",
+  "exam_date": "2026-06-15"
+}
+
+###
+
+### 6. Get All My Exams
+GET http://127.0.0.1:8000/exams/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwNDEyODkyLCJpYXQiOjE3ODA0MDkyOTIsImp0aSI6IjYwYTNkNDFhZGRmYTRmMjFhOTI5YjQ1MzQ0NjU5NGQ0IiwidXNlcl9pZCI6IjEwIn0.COmSakM2vQdNbJqgD9coUG3i87aCgsULKSX9YnYp5KE
+
+###
+
+### 7. Log a Completed Study Session (Timer)
+POST http://127.0.0.1:8000/sessions/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwNDEyODkyLCJpYXQiOjE3ODA0MDkyOTIsImp0aSI6IjYwYTNkNDFhZGRmYTRmMjFhOTI5YjQ1MzQ0NjU5NGQ0IiwidXNlcl9pZCI6IjEwIn0.COmSakM2vQdNbJqgD9coUG3i87aCgsULKSX9YnYp5KE
+
+{
+  "start_time": "2026-06-02T10:00:00Z",
+  "end_time": "2026-06-02T11:30:00Z",
+  "total_seconds": 5400
+}
+
+###
+
+### 8. Get Study Session History
+GET http://127.0.0.1:8000/sessions/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwNDEyODkyLCJpYXQiOjE3ODA0MDkyOTIsImp0aSI6IjYwYTNkNDFhZGRmYTRmMjFhOTI5YjQ1MzQ0NjU5NGQ0IiwidXNlcl9pZCI6IjEwIn0.COmSakM2vQdNbJqgD9coUG3i87aCgsULKSX9YnYp5KE

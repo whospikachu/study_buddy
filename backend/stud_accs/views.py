@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import RegisterSerializer, ExamSerializer
+from .serializers import RegisterSerializer, ExamSerializer, TodoSerializer, StudySessionSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
-from .models import Exam
+from .models import Exam, Todo, StudySession
 
 # Create your views here.
 class RegisterView(generics.CreateAPIView):
@@ -41,3 +41,28 @@ class ExamListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self,serializer):
         serializer.save(user = self.request.user)
+
+class TodoListCreateView(generics.ListCreateAPIView):
+    serializer_class = TodoSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Todo.objects.filter(user = self.request.user)
+    def perform_create(self,serializer):
+        serializer.save(user = self.request.user)
+class TodoListDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TodoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Todo.objects.filter(user = self.request.user)
+class StudySessionView(generics.ListCreateAPIView):
+    serializer_class = StudySessionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return StudySession.objects.filter(user=self.request.user).order_by('-start_time')
+
+    def perform_create(self,serializer):
+        serializer.save(user=self.request.user)
+        

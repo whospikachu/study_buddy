@@ -1,6 +1,7 @@
+from dataclasses import field
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Exam, SyllabusItem
+from .models import Exam, SyllabusItem, Todo, StudySession
 class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -24,3 +25,14 @@ class ExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = ['id','subject_name','exam_date','syllabus_items','progress']
+
+
+class TodoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = ['id', 'task', 'is_done']
+
+class StudySessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudySession
+        fields = ['id', 'start_time', 'end_time', 'duration_seconds']
