@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from stud_accs.views import RegisterView, HomeView, LogoutView
+from stud_accs.views import RegisterView, HomeView, LogoutView, ExamListCreateView, TodoListCreateView, TodoListDetailView, StudySessionView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -25,6 +25,10 @@ urlpatterns = [
     path('api/login/',TokenObtainPairView.as_view(), name = 'get-token'),
     path('api/token/refresh/',TokenRefreshView.as_view(), name = 'token-refresh'),
     path('home/',HomeView.as_view(),name='home'),
-    path("logout/",LogoutView.as_view(),name='logout')
+    path("logout/",LogoutView.as_view(),name='logout'),
+    path("exams/", ExamListCreateView.as_view(),name='exam-list-create'),
+    path('todos/',TodoListCreateView.as_view(),name='todo-list-create'),
+    path("todos/<int:pk>/",TodoListDetailView.as_view(),name='todo-list-detail'),
+    path("sessions/",StudySessionView.as_view(),name='study-sessions')
 
 ]
