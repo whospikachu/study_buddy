@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import RegisterSerializer, ExamSerializer, TodoSerializer, StudySessionSerializer
+from .serializers import RegisterSerializer, ExamSerializer, TodoSerializer, StudySessionSerializer,SyllabusItemSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
-from .models import Exam, Todo, StudySession
+from .models import Exam, Todo, StudySession,SyllabusItem
 
 # Create your views here.
 class RegisterView(generics.CreateAPIView):
@@ -41,6 +41,15 @@ class ExamListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self,serializer):
         serializer.save(user = self.request.user)
+class ExamDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Exam.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ExamSerializer
+
+    def get_queryset(self):
+        # Ensures users can only view/update/delete their own exams
+        return Exam.objects.filter(user=self.request.user)
+
 
 class TodoListCreateView(generics.ListCreateAPIView):
     serializer_class = TodoSerializer
@@ -66,3 +75,11 @@ class StudySessionView(generics.ListCreateAPIView):
     def perform_create(self,serializer):
         serializer.save(user=self.request.user)
         
+class SyllabusItemCreateView(generics.CreateAPIView):
+    queryset = SyllabusItem.objects.all()
+    serializer_class = SyllabusItemSerializer
+
+class SyllabusItemDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = SyllabusItemSerializer
+    def get_queryset(self):
+        return SyllabusItem.objects.filter(exam__user=self.request.user)

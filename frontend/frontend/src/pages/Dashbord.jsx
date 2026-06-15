@@ -41,7 +41,7 @@ function DashboardPage({ setIsAuthenticated }) {
             <h3 className="text-xl font-bold text-indigo-300 mb-4">
               Task Checklist
             </h3>
-            {/* 2. SWAP PLACEHOLDER FOR THE ACTIVE COMPONENT */}
+
             <TodoList />
           </div>
           <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl min-h-[250px]">

@@ -59,25 +59,26 @@ function ExamTracker() {
     }
   };
 
-  // 1. Add Syllabus Item (Topic) to a specific Exam
   const handleAddSyllabusItem = async (e, examId) => {
     e.preventDefault();
     if (!newTopicName.trim()) return;
 
     try {
-      // Adjust endpoint string if your Django route uses a different path (e.g., 'syllabus/')
-      const response = await api.post("exams/", {
-        exam: examId, // Passes foreign key ID
+      // Direct POST to your brand new dedicated endpoint!
+      const response = await api.post("syllabus/", {
+        exam: examId, // Links it directly to the target parent exam
         topic_name: newTopicName,
         is_completed: false,
       });
 
-      // Update local state by injecting the new item into the target exam's array
+      // Append the newly created item directly onto the target exam's array locally
       setExams(
         exams.map((exam) => {
           if (exam.id === examId) {
-            const updatedItems = [...exam.syllabus_items, response.data];
-            // Recalculate quick progress locally until next full page refresh
+            const updatedItems = [
+              ...(exam.syllabus_items || []),
+              response.data,
+            ];
             const completedCount = updatedItems.filter(
               (item) => item.is_completed
             ).length;
@@ -94,6 +95,7 @@ function ExamTracker() {
           return exam;
         })
       );
+
       setNewTopicName("");
     } catch (err) {
       console.error(err);
@@ -104,10 +106,12 @@ function ExamTracker() {
   // 2. Toggle Status of a Syllabus Item
   const handleToggleSyllabusItem = async (examId, itemId, currentStatus) => {
     try {
+      // Direct PATCH to the individual item's new endpoint
       const response = await api.patch(`syllabus/${itemId}/`, {
         is_completed: !currentStatus,
       });
 
+      // Update the local state array with the updated item returned from Django
       setExams(
         exams.map((exam) => {
           if (exam.id === examId) {
@@ -130,6 +134,8 @@ function ExamTracker() {
           return exam;
         })
       );
+
+      setError("");
     } catch (err) {
       console.error(err);
       setError("Could not update topic status.");
@@ -188,6 +194,7 @@ function ExamTracker() {
 
       {error && <p className="text-rose-400 text-xs mb-2">⚠️ {error}</p>}
 
+      {/* List Display */}
       {loading ? (
         <p className="text-slate-500 text-sm animate-pulse">Loading exams...</p>
       ) : exams.length === 0 ? (
@@ -248,7 +255,7 @@ function ExamTracker() {
                   </div>
                 </div>
 
-                {/* Progress Bar Bar */}
+                {/* Progress Bar */}
                 <div className="space-y-1 pl-5">
                   <div className="flex justify-between text-[11px] text-slate-400">
                     <span>Syllabus Completed</span>
@@ -299,14 +306,15 @@ function ExamTracker() {
                       </p>
                     ) : (
                       <ul className="space-y-1.5">
-                        {exam.syllabus_items.map((item) => (
+                        {exam.syllabus_items.map((item, idx) => (
+                          // Fallback to index if your backend didn't supply an id yet during creation
                           <li
-                            key={item.id}
+                            key={item.id || idx}
                             className="flex items-center gap-2.5 bg-slate-950/40 border border-slate-800/40 p-2 rounded-lg"
                           >
                             <input
                               type="checkbox"
-                              checked={item.is_completed}
+                              checked={item.is_completed || false}
                               onChange={() =>
                                 handleToggleSyllabusItem(
                                   exam.id,

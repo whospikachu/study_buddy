@@ -15,7 +15,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class SyllabusItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = SyllabusItem
-        fields = ['id','topic_name','is_completed']
+        fields = ['id','exam','topic_name','is_completed']
 
 
 class ExamSerializer(serializers.ModelSerializer):
