@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from stud_accs.views import RegisterView, HomeView, LogoutView, ExamListCreateView, TodoListCreateView, TodoListDetailView, StudySessionView
+from stud_accs.views import RegisterView, HomeView, LogoutView, ExamListCreateView, TodoListCreateView, TodoListDetailView, StudySessionView, ExamDetailView, SyllabusItemCreateView,SyllabusItemDetailView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -27,8 +27,11 @@ urlpatterns = [
     path('home/',HomeView.as_view(),name='home'),
     path("logout/",LogoutView.as_view(),name='logout'),
     path("exams/", ExamListCreateView.as_view(),name='exam-list-create'),
+    path("exams/<int:pk>/",ExamDetailView.as_view(),name='exam-detailed'),
     path('todos/',TodoListCreateView.as_view(),name='todo-list-create'),
     path("todos/<int:pk>/",TodoListDetailView.as_view(),name='todo-list-detail'),
-    path("sessions/",StudySessionView.as_view(),name='study-sessions')
+    path("sessions/",StudySessionView.as_view(),name='study-sessions'),
+    path("syllabus/",SyllabusItemCreateView.as_view(),name='create-syllabusitem'),
+    path("syllabus/<int:pk>/",SyllabusItemDetailView.as_view(),name="syllabusitem-detailed")
 
 ]

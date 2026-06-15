@@ -13,10 +13,6 @@ function TodoList() {
   }, []);
 
   const fetchTodos = async () => {
-    console.log(
-      "Current Token in LocalStorage:",
-      localStorage.getItem("access_token")
-    );
     try {
       setLoading(true);
       // Adjust endpoint string if your Django path differs (e.g., 'todos/')
