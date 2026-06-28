@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { authService } from "../services/authService";
-import TodoList from "../components/TodoList"; // <-- 1. IMPORT THE COMPONENT
+import TodoList from "../components/TodoList";
+import StudyTimer from "../components/StudyTimer";
 import ExamTracker from "../components/Exams";
+import StudyAnalytics from "../components/StudyAnalytics";
 function DashboardPage({ setIsAuthenticated }) {
+  const [refreshToken, setRefreshToken] = useState(0);
+
   const handleLogout = () => {
     authService.logout();
     setIsAuthenticated(false);
   };
-
+  const handleSessionComplete = () => {
+    setRefreshToken((prev) => prev + 1);
+  };
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col">
       {/* Top Navigation Bar */}
       <nav className="bg-slate-800 border-b border-slate-700 px-6 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-indigo-400 flex items-center gap-2">
-          📚 Study Buddy
+          Study Buddy
         </h1>
         <button
           onClick={handleLogout}
@@ -28,10 +34,10 @@ function DashboardPage({ setIsAuthenticated }) {
         {/* Left Column: Timer & Analytics */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl h-64 flex items-center justify-center">
-            <p className="text-slate-400">[Focus Timer Component Goes Here]</p>
+            <StudyTimer onSessionLogged={handleSessionComplete} />
           </div>
-          <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl h-64 flex items-center justify-center">
-            <p className="text-slate-400">[Study Analytics Chart Goes Here]</p>
+          <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <StudyAnalytics refreshTrigger={refreshToken} />
           </div>
         </div>
 
